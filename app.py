@@ -52,7 +52,7 @@ def p_math_label(n):
         2: 'P[X\geq x]',
         3: 'P[|X|\leq x]',
         4: 'P[X\leq x_1 \wedge X\geq x_2]',
-        5: 'P[||\leq x]',
+        5: 'P[|X|\leq x]',
         6: 'P[x_1\leq X \leq x_2]'
     }
     return labels[n]
