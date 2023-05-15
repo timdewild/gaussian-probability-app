@@ -153,7 +153,41 @@ def x2_format(ptype, mu, sigma, t, x1):
 #--- App starts here ---#
 st.write("""   
     # Gaussian Probability Calculator  
+    This applet allows you to calculate probabilities for a normal distribution with arbritray mean and standard deviation.
+    The type of probability interval you want to calculate can be selected in the control panel on the left. The blue areas in the preview show over which intervals the probability will be calculated. 
+    More details on how the probabilities are calculated can be found in the expander below. 
 """)
+         
+details = st.expander("Details")
+
+with details:
+    st.write("""
+        #### Calculational Details
+        Consider a normally distributed random variable $X$. The probability density function (PDF) $f(x)$ for a normal distribution with mean $\mu$ and standard deviation $\sigma$ is:    
+        $$
+        f(x)=\\frac{1}{\sqrt{2\pi\sigma^2}}\;e^{(x-\mu)^2/2\sigma^2}.
+        $$
+
+        The probability for the random variable $X$ to have a value in the interval $[x_1, x_2]$ is given by the integral over PDF:
+        $$
+        P[x_1\leq X \leq x)_2] = \int_{x_1}^{x_2}f(x)\;dx. 
+        $$
+
+        For easy numerical evaluation of the integral, we will work with the rescaled variable $z\equiv (x-\mu)/\sigma$, so that $dx = \sigma\;dz$ and the integral becomes:
+        $$
+        P[x_1\leq X \leq x_2] = \\frac{1}{\sqrt{2\pi}}\int_{z_1}^{z_2} e^{z^2/2}\;dz, 
+        $$
+        where the integration bounds are $z_{1,2}\equiv (x_{1,2}-\mu)/\sigma$. This result can be recasted in term of the error function $\\mathrm{erf}(z)$:
+        $$
+        P[x_1\leq X \leq x_2] = \\frac{1}{2}\\Big[\\mathrm{erf}(z_2/\sqrt{2})-\\mathrm{erf}(z_1/\sqrt{2})\\Big]. 
+        $$
+        The error function is defined as:
+        $$
+        \\mathrm{erf}(z)\equiv \\frac{2}{\\sqrt{\\pi}}\\int_0^z e^{-t^2/2}\;dt. 
+        $$
+        All other probabilities that can be calculated in this applet can be derived from this result, using that $\\mathrm{erf}(\\pm \infty)=\pm 1$. 
+        
+    """)
 
 with st.sidebar:
     st.write("""
@@ -282,9 +316,10 @@ fig2.clf()
 
 st.write(f"""
     #### Result
-    The calculated probability is ${p_math_label(ptype)} < {round(P,3)}$. 
-""")
+    The calculated probability is ${p_math_label(ptype)} = {round(P,3)}$. 
 
+
+""")
 
 
 
